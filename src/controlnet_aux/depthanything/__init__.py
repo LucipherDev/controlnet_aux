@@ -84,7 +84,6 @@ class DepthAnythingDetector:
     
     def __call__(self, input_image, detect_resolution=512, image_resolution=512, output_type=None, gamma_corrected=False):
         device = next(iter(self.model.parameters())).device
-        offload_device = torch.device("cpu")
 
         if not isinstance(input_image, np.ndarray):
             input_image = np.array(input_image, dtype=np.uint8)
@@ -120,12 +119,12 @@ class DepthAnythingDetector:
         out = []
         self.model.to(device)
         autocast_condition = (self.dtype != torch.float32)
-        with torch.autocast("cuda", dtype=self.dtype) if autocast_condition else nullcontext():
-            for img in images:
-                depth = self.model(img.unsqueeze(0).to(device).to(self.dtype))
-                depth = (depth - depth.min()) / (depth.max() - depth.min())
-                out.append(depth.cpu())
-        self.model.to(offload_device)
+        with torch.no_grad():
+            with torch.autocast("cuda", dtype=self.dtype) if autocast_condition else nullcontext():
+                for img in images:
+                    depth = self.model(img.unsqueeze(0).to(device).to(self.dtype))
+                    depth = (depth - depth.min()) / (depth.max() - depth.min())
+                    out.append(depth.cpu())
 
         depth_out = torch.cat(out, dim=0)
         depth_out = depth_out.unsqueeze(-1).repeat(1, 1, 1, 3).cpu().float()
@@ -153,5 +152,7 @@ class DepthAnythingDetector:
 
         if output_type == "pil":
             detected_map = Image.fromarray((detected_map * 255).astype(np.uint8))
+        elif output_type == "np":
+            detected_map = (detected_map * 255).astype(np.uint8) 
 
         return detected_map
