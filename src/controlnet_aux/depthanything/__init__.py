@@ -61,8 +61,10 @@ class DepthAnythingDetector:
         with (init_empty_weights() if is_accelerate_available else nullcontext()):
             if 'metric' in filename:
                 model = DepthAnythingV2(**{**model_configs[encoder], 'is_metric': True, 'max_depth': max_depth})
+                is_metric = True
             else:
                 model = DepthAnythingV2(**model_configs[encoder])
+                is_metric = False
         
         state_dict = safetensors.torch.load_file(model_path, device=device.type)
         
@@ -73,8 +75,6 @@ class DepthAnythingDetector:
             model.load_state_dict(state_dict)
 
         model.eval()
-        
-        is_metric = model.is_metric
 
         return cls(model, dtype, is_metric)
 
