@@ -6,6 +6,10 @@ The code is copy-pasted from the respective folders in <https://github.com/lllya
 
 All credit & copyright goes to <https://github.com/lllyasviel> .
 
+## Improvements from Main Repo
+
+- Added [Depth-Anything-V2](https://github.com/DepthAnything/Depth-Anything-V2)
+
 ## Install
 
 ```
@@ -41,7 +45,7 @@ img = Image.open(BytesIO(response.content)).convert("RGB").resize((512, 512))
 
 # load processor from processor_id
 # options are:
-# ["canny", "depth_leres", "depth_leres++", "depth_midas", "depth_zoe", "lineart_anime",
+# ["canny", "depth_leres", "depth_leres++", "depth_midas", "depth_zoe", "depth_anything_v2", "lineart_anime",
 #  "lineart_coarse", "lineart_realistic", "mediapipe_face", "mlsd", "normal_bae", "normal_midas",
 #  "openpose", "openpose_face", "openpose_faceonly", "openpose_full", "openpose_hand",
 #  "scribble_hed, "scribble_pidinet", "shuffle", "softedge_hed", "softedge_hedsafe",
@@ -58,7 +62,7 @@ Each model can be loaded individually by importing and instantiating them as fol
 from PIL import Image
 import requests
 from io import BytesIO
-from controlnet_aux import HEDdetector, MidasDetector, MLSDdetector, OpenposeDetector, PidiNetDetector, NormalBaeDetector, LineartDetector, LineartAnimeDetector, CannyDetector, ContentShuffleDetector, ZoeDetector, MediapipeFaceDetector, SamDetector, LeresDetector, DWposeDetector
+from controlnet_aux import HEDdetector, MidasDetector, MLSDdetector, OpenposeDetector, PidiNetDetector, NormalBaeDetector, LineartDetector, LineartAnimeDetector, CannyDetector, ContentShuffleDetector, ZoeDetector, MediapipeFaceDetector, SamDetector, LeresDetector, DWposeDetector, DepthAnythingDetector
 
 # load image
 url = "https://huggingface.co/lllyasviel/sd-controlnet-openpose/resolve/main/images/pose.png"
@@ -69,6 +73,7 @@ img = Image.open(BytesIO(response.content)).convert("RGB").resize((512, 512))
 # load checkpoints
 hed = HEDdetector.from_pretrained("lllyasviel/Annotators")
 midas = MidasDetector.from_pretrained("lllyasviel/Annotators")
+depthanything = DepthAnythingDetector.from_pretrained("Kijai/DepthAnythingV2-safetensors")
 mlsd = MLSDdetector.from_pretrained("lllyasviel/Annotators")
 open_pose = OpenposeDetector.from_pretrained("lllyasviel/Annotators")
 pidi = PidiNetDetector.from_pretrained("lllyasviel/Annotators")
@@ -103,6 +108,7 @@ lineart_standard = LineartStandardDetector()
 # process
 processed_image_hed = hed(img)
 processed_image_midas = midas(img)
+processed_image_midas = depthanything(img)
 processed_image_mlsd = mlsd(img)
 processed_image_open_pose = open_pose(img, hand_and_face=True)
 processed_image_pidi = pidi(img, safe=True)
