@@ -98,7 +98,7 @@ class DepthAnythingDetector:
 
         orig_H, orig_W, C = input_image.shape
 
-        images = torch.tensor(input_image).permute(2, 0, 1).unsqueeze(0).float().numpy()  # Shape: (1, C, H, W)
+        images = torch.tensor(input_image).permute(2, 0, 1).unsqueeze(0).float().numpy()
 
         H, W = orig_H, orig_W
         if W % 14 != 0:
@@ -133,7 +133,7 @@ class DepthAnythingDetector:
         final_H = (orig_H // 2) * 2
         final_W = (orig_W // 2) * 2
         if depth_out.shape[1] != final_H or depth_out.shape[2] != final_W:
-            depth_out_np = depth_out.numpy()
+            depth_out_np = depth_out.detach().cpu().numpy()
             resized_depths = []
             for img in depth_out_np:
                 img_resized = cv2.resize(img, (final_W, final_H), interpolation=cv2.INTER_LINEAR)
