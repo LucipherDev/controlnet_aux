@@ -126,6 +126,6 @@ def test_dwpose(img):
     return_pil("dwpose", dwpose, img)
 
 def test_depthanything(img):
-    depthanything = DepthAnythingDetector.from_pretrained("Kijai/DepthAnythingV2-safetensors", filename="depth_anything_v2_vits_fp16.safetensors")
+    depthanything = DepthAnythingDetector.from_pretrained("Kijai/DepthAnythingV2-safetensors")
     common("depthanything", depthanything, img)
     output("depthanything_img", depthanything(img=img))
