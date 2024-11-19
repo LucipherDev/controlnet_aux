@@ -29,7 +29,7 @@ class DepthAnythingDetector:
         
     @classmethod
     def from_pretrained(cls, pretrained_model_or_path, filename=None, cache_dir=None, local_files_only=False):
-        device = torch.device("cpu")
+        device = torch.device("cuda")
         
         filename = filename or "depth_anything_v2_vitl_fp32.safetensors"
 
@@ -122,7 +122,7 @@ class DepthAnythingDetector:
         autocast_condition = (self.dtype != torch.float32)
         with torch.autocast("cuda", dtype=self.dtype) if autocast_condition else nullcontext():
             for img in images:
-                depth = self.model(img.unsqueeze(0).to(device))
+                depth = self.model(img.unsqueeze(0).to(device).to(self.dtype))
                 depth = (depth - depth.min()) / (depth.max() - depth.min())
                 out.append(depth.cpu())
         self.model.to(offload_device)
