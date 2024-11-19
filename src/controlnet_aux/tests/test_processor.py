@@ -77,6 +77,12 @@ class TestProcessor(unittest.TestCase):
         image = Image.open('test_image.png')
         processed_image = processor(image)
         self.assertIsInstance(processed_image, bytes)
+        
+    def test_depthanything(self):
+        processor = Processor('depth_anything_v2')
+        image = Image.open('test_image.png')
+        processed_image = processor(image)
+        self.assertIsInstance(processed_image, bytes)
 
     def test_mediapipe_face(self):
         processor = Processor('mediapipe_face')
