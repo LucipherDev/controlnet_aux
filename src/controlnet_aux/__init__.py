@@ -18,3 +18,4 @@ from .segment_anything import SamDetector
 from .shuffle import ContentShuffleDetector
 from .teed import TEEDdetector
 from .zoe import ZoeDetector
+from .depthanything import DepthAnythingDetector

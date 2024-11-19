@@ -12,7 +12,7 @@ from controlnet_aux import (CannyDetector, ContentShuffleDetector, HEDdetector,
                             LineartDetector, MediapipeFaceDetector,
                             MidasDetector, MLSDdetector, NormalBaeDetector,
                             OpenposeDetector, PidiNetDetector, ZoeDetector,
-                            DWposeDetector)
+                            DWposeDetector, DepthAnythingDetector)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +41,8 @@ MODELS = {
     'lineart_anime': {'class': LineartAnimeDetector, 'checkpoint': True},
     'depth_zoe': {'class': ZoeDetector, 'checkpoint': True}, 
     'depth_leres': {'class': LeresDetector, 'checkpoint': True}, 
-    'depth_leres++': {'class': LeresDetector, 'checkpoint': True}, 
+    'depth_leres++': {'class': LeresDetector, 'checkpoint': True},
+    'depth_anything_v2': {'class': DepthAnythingDetector, 'checkpoint': True},
     # instantiate
     'shuffle': {'class': ContentShuffleDetector, 'checkpoint': False},
     'mediapipe_face': {'class': MediapipeFaceDetector, 'checkpoint': False},
@@ -75,6 +76,7 @@ MODEL_PARAMS = {
     'depth_zoe': {},
     'depth_leres': {'boost': False},
     'depth_leres++': {'boost': True},
+    'depth_anything_v2': {},
     'mediapipe_face': {},
 }
 

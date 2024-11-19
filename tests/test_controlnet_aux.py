@@ -12,7 +12,7 @@ from controlnet_aux import (CannyDetector, ContentShuffleDetector, HEDdetector,
                             LineartDetector, MediapipeFaceDetector,
                             MidasDetector, MLSDdetector, NormalBaeDetector,
                             OpenposeDetector, PidiNetDetector, SamDetector,
-                            ZoeDetector, DWposeDetector)
+                            ZoeDetector, DWposeDetector, DepthAnythingDetector)
 
 OUTPUT_DIR = "tests/outputs"
 
@@ -124,3 +124,8 @@ def test_dwpose(img):
     dwpose = DWposeDetector()
     common("dwpose", dwpose, img)
     return_pil("dwpose", dwpose, img)
+
+def test_depthanything(img):
+    depthanything = DepthAnythingDetector.from_pretrained("Kijai/DepthAnythingV2-safetensors", filename="depth_anything_v2_vits_fp16.safetensors")
+    common("depthanything", depthanything, img)
+    output("depthanything_img", depthanything(img=img))
