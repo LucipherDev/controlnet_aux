@@ -82,7 +82,7 @@ class DepthAnythingDetector:
         self.model.to(device)
         return self
     
-    def __call__(self, input_image, detect_resolution=512, image_resolution=512, output_type=None, gamma_corrected=False):
+    def __call__(self, input_image, detect_resolution=512, image_resolution=512, output_type=None):
         device = next(iter(self.model.parameters())).device
 
         if not isinstance(input_image, np.ndarray):
